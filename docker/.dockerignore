@@ -1,0 +1,14 @@
+.git
+.github
+.gitignore
+*.md
+terraform/
+jenkins/
+scripts/
+tests/
+.terraform/
+*.tfstate*
+.DS_Store
+coverage/
+test-results/
+.scannerwork/

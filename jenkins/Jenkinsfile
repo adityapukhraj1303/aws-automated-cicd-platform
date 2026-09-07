@@ -1,0 +1,158 @@
+// =============================================================================
+// AWS Automated CI/CD Platform - Declarative Jenkinsfile
+//
+// 4-Stage Production Pipeline:
+//   1. Build        - ShellCheck analysis & multi-stage Alpine Docker build
+//   2. Test         - Automated Bats-core unit testing (pipeline fails on test error)
+//   3. Code Quality - SonarQube Scanner & Quality Gate enforcement (abort on failure)
+//   4. Deploy       - Push to AWS ECR, upload artifacts to S3, ECS rollout & CloudWatch audit
+// =============================================================================
+
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '20', artifactNumToKeepStr: '10'))
+        timestamps()
+        disableConcurrentBuilds()
+        ansiColor('xterm')
+    }
+
+    triggers {
+        // Trigger automatically via GitHub Webhook on push
+        githubPush()
+    }
+
+    environment {
+        AWS_DEFAULT_REGION   = 'us-east-1'
+        AWS_ACCOUNT_ID       = credentials('aws-account-id')
+        AWS_CREDENTIALS_ID   = 'aws-jenkins-credentials'
+        ECR_REPO_NAME        = 'aws-cicd-platform-app'
+        S3_ARTIFACT_BUCKET   = credentials('s3-artifact-bucket-name')
+        ECS_CLUSTER_NAME     = 'aws-cicd-platform-cluster'
+        ECS_SERVICE_NAME     = 'aws-cicd-platform-service'
+        CLOUDWATCH_LOG_GROUP = '/aws/ecs/aws-cicd-platform-app'
+        SONARQUBE_SERVER     = 'SonarQube'
+        IMAGE_TAG            = "${env.GIT_COMMIT ? env.GIT_COMMIT.take(8) : 'build-' + env.BUILD_NUMBER}"
+        ECR_REGISTRY_URI     = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_DEFAULT_REGION}.amazonaws.com"
+    }
+
+    stages {
+        // ── Stage 1: Build ───────────────────────────────────────────────────
+        stage('Build') {
+            steps {
+                echo "=========================================================="
+                echo " [STAGE 1/4] Build & Containerization"
+                echo " Commit: ${IMAGE_TAG} | Target: ${ECR_REGISTRY_URI}/${ECR_REPO_NAME}:${IMAGE_TAG}"
+                echo "=========================================================="
+                sh '''
+                    set -eo pipefail
+                    mkdir -p test-results artifacts
+                    
+                    # Stamp build metadata
+                    echo "BUILD_NUMBER=${BUILD_NUMBER}" > artifacts/build-info.txt
+                    echo "GIT_COMMIT=${GIT_COMMIT:-local}" >> artifacts/build-info.txt
+                    echo "BUILD_TIMESTAMP=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> artifacts/build-info.txt
+                    
+                    # Execute build automation script
+                    bash jenkins/scripts/build.sh
+                '''
+            }
+        }
+
+        // ── Stage 2: Test ────────────────────────────────────────────────────
+        stage('Test') {
+            steps {
+                echo "=========================================================="
+                echo " [STAGE 2/4] Automated Unit & Integration Testing"
+                echo "=========================================================="
+                sh '''
+                    set -eo pipefail
+                    bash jenkins/scripts/test.sh
+                '''
+            }
+            post {
+                always {
+                    // Record test results if generated
+                    junit testResults: 'test-results/*.xml', allowEmptyResults: true
+                }
+            }
+        }
+
+        // ── Stage 3: Code Quality (SonarQube) ────────────────────────────────
+        stage('Code Quality') {
+            steps {
+                echo "=========================================================="
+                echo " [STAGE 3/4] SonarQube Scan & Quality Gate Evaluation"
+                echo "=========================================================="
+                withSonarQubeEnv(SONARQUBE_SERVER) {
+                    sh '''
+                        set -eo pipefail
+                        bash jenkins/scripts/quality-gate.sh
+                    '''
+                }
+                
+                timeout(time: 5, unit: 'MINUTES') {
+                    script {
+                        echo "Waiting for SonarQube Quality Gate result..."
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted: SonarQube Quality Gate FAILURE (Status: ${qg.status})"
+                        } else {
+                            echo "SonarQube Quality Gate PASSED successfully!"
+                        }
+                    }
+                }
+            }
+        }
+
+        // ── Stage 4: Deploy ──────────────────────────────────────────────────
+        stage('Deploy') {
+            steps {
+                echo "=========================================================="
+                echo " [STAGE 4/4] AWS Deployment (ECR, S3, ECS Fargate & CloudWatch)"
+                echo "=========================================================="
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: env.AWS_CREDENTIALS_ID,
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh '''
+                        set -eo pipefail
+                        bash jenkins/scripts/deploy.sh
+                        bash jenkins/scripts/log-to-cloudwatch.sh "SUCCESS" "Deployment completed successfully for ${IMAGE_TAG}"
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs deleteDirs: false, notFailBuild: true
+        }
+        success {
+            echo "=========================================================="
+            echo " 🎉 CI/CD Pipeline Completed Successfully!"
+            echo " Image: ${ECR_REGISTRY_URI}/${ECR_REPO_NAME}:${IMAGE_TAG}"
+            echo "=========================================================="
+        }
+        failure {
+            echo "❌ Pipeline failed at stage: ${env.STAGE_NAME}"
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: env.AWS_CREDENTIALS_ID,
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh '''
+                        bash jenkins/scripts/log-to-cloudwatch.sh "FAILED" "Pipeline failed at stage: ${STAGE_NAME}" || true
+                    '''
+                }
+            }
+        }
+    }
+}

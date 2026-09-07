@@ -1,0 +1,69 @@
+name: CI Quality Gate & Pre-Flight Validation
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  static-analysis:
+    name: ShellCheck & Bats Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: 'app scripts jenkins/scripts'
+
+      - name: Setup Bats Testing Framework
+        uses: bats-core/bats-action@3.0.0
+
+      - name: Execute Bats Test Suites
+        run: |
+          bats tests/
+
+  docker-build:
+    name: Multi-Stage Docker Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Container
+        run: |
+          docker build -t aws-cicd-platform-app:ci -f docker/Dockerfile .
+
+      - name: Test Container Healthcheck
+        run: |
+          docker run -d -p 8080:8080 --name test-container aws-cicd-platform-app:ci
+          sleep 3
+          curl -f http://localhost:8080/health
+          curl -f http://localhost:8080/version
+          curl -f http://localhost:8080/api/info
+          curl -f http://localhost:8080/api/metrics
+          docker rm -f test-container
+
+  terraform-validation:
+    name: Terraform Syntax & Module Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.0
+
+      - name: Terraform Format Check
+        run: |
+          terraform -chdir=terraform fmt -check
+
+      - name: Terraform Validate
+        run: |
+          terraform -chdir=terraform init -backend=false
+          terraform -chdir=terraform validate

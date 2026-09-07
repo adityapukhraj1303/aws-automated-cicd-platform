@@ -1,0 +1,40 @@
+# Compiled binaries & artifacts
+*.tar.gz
+*.zip
+*.out
+artifacts/
+test-results/
+coverage/
+
+# Docker temporary state
+.docker/
+
+# Terraform ignores
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfplan
+*.tfvars
+!terraform.tfvars.example
+!environments/*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# SonarQube cache
+.scannerwork/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# IDE specific files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
