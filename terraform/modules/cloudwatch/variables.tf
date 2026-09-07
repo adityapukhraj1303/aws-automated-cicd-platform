@@ -45,7 +45,7 @@ variable "alb_target_group_arn_suffix" {
 variable "aws_region" {
   description = "AWS region"
   type        = string
-  default     = "us-east-1"
+  default     = "ap-south-1"
 }
 
 variable "tags" {

@@ -229,11 +229,11 @@ terraform apply -var-file="environments/dev.tfvars" -auto-approve
 Upon completion, Terraform will output your live infrastructure endpoints:
 ```
 Outputs:
-alb_dns_name = "aws-cicd-platform-alb-dev-192837465.us-east-1.elb.amazonaws.com"
-application_url = "http://aws-cicd-platform-alb-dev-192837465.us-east-1.elb.amazonaws.com"
+alb_dns_name = "aws-cicd-platform-alb-dev-192837465.ap-south-1.elb.amazonaws.com"
+application_url = "http://aws-cicd-platform-alb-dev-192837465.ap-south-1.elb.amazonaws.com"
 cloudwatch_dashboard = "aws-cicd-platform-health-dev"
 cloudwatch_log_group = "/aws/ecs/aws-cicd-platform-app"
-ecr_repository_url = "123456789012.dkr.ecr.us-east-1.amazonaws.com/aws-cicd-platform-app"
+ecr_repository_url = "123456789012.dkr.ecr.ap-south-1.amazonaws.com/aws-cicd-platform-app"
 jenkins_ci_role_arn = "arn:aws:iam::123456789012:role/aws-cicd-platform-jenkins-ci-role-dev"
 s3_artifact_bucket = "aws-cicd-platform-artifacts-dev-8f92a1bc"
 ```
@@ -284,7 +284,7 @@ Access the live Application Load Balancer URL in your browser or via `curl`:
 
 ```bash
 # Set your ALB URL
-export APP_URL="http://aws-cicd-platform-alb-dev-192837465.us-east-1.elb.amazonaws.com"
+export APP_URL="http://aws-cicd-platform-alb-dev-192837465.ap-south-1.elb.amazonaws.com"
 
 # 1. Access Interactive DevOps & SRE Dashboard
 curl -I ${APP_URL}/
@@ -311,7 +311,7 @@ curl -s ${APP_URL}/api/metrics
   "uptime_seconds": 1842,
   "hostname": "ip-10-0-1-42.ec2.internal",
   "environment": "dev",
-  "region": "us-east-1",
+  "region": "ap-south-1",
   "timestamp": "2026-09-07T13:30:00Z"
 }
 ```

@@ -1,7 +1,13 @@
 variable "aws_region" {
   description = "AWS deployment region"
   type        = string
-  default     = "us-east-1"
+  default     = "ap-south-1"
+}
+
+variable "instance_type" {
+  description = "EC2 instance type for runner or compute"
+  type        = string
+  default     = "t3.small"
 }
 
 variable "project_name" {

@@ -12,7 +12,7 @@ services:
     environment:
       - PORT=8080
       - ENVIRONMENT=local-dev
-      - AWS_REGION=us-east-1
+      - AWS_REGION=ap-south-1
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 10s

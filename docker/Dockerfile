@@ -36,7 +36,7 @@ ENV APP_USER=devops \
     APP_DIR=/opt/app \
     PORT=8080 \
     ENVIRONMENT=production \
-    AWS_REGION=us-east-1
+    AWS_REGION=ap-south-1
 
 RUN addgroup -g ${APP_GID} ${APP_USER} && \
     adduser -u ${APP_UID} -G ${APP_USER} -h ${APP_DIR} -s /bin/bash -D ${APP_USER}

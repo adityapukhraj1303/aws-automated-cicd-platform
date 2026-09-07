@@ -17,7 +17,7 @@ echo "[DEPLOY] ============================================================"
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$REPO_ROOT"
 
-AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
+AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-ap-south-1}"
 ECR_REPO_NAME="${ECR_REPO_NAME:-aws-cicd-platform-app}"
 IMAGE_TAG="${IMAGE_TAG:-latest}"
 ECS_CLUSTER_NAME="${ECS_CLUSTER_NAME:-aws-cicd-platform-cluster}"

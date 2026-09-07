@@ -7,7 +7,7 @@ set -eo pipefail
 
 STATUS="${1:-INFO}"
 MESSAGE="${2:-No message provided}"
-AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
+AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-ap-south-1}"
 LOG_GROUP="${CLOUDWATCH_LOG_GROUP:-/aws/ecs/aws-cicd-platform-app}"
 STREAM_NAME="deployments-$(date +'%Y-%m')"
 

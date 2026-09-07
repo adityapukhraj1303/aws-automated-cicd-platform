@@ -30,7 +30,7 @@ fi
 START_TIME=$(date +%s)
 HOSTNAME_STR="$(hostname 2>/dev/null || echo 'aws-cicd-container')"
 ENVIRONMENT="${ENVIRONMENT:-production}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
+AWS_REGION="${AWS_REGION:-ap-south-1}"
 
 cleanup() {
     echo "[$(date -u +'%Y-%m-%dT%H:%M:%SZ')] Microservice shutting down cleanly..."

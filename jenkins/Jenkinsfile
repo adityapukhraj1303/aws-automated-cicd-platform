@@ -25,7 +25,7 @@ pipeline {
     }
 
     environment {
-        AWS_DEFAULT_REGION   = 'us-east-1'
+        AWS_DEFAULT_REGION   = 'ap-south-1'
         AWS_ACCOUNT_ID       = credentials('aws-account-id')
         AWS_CREDENTIALS_ID   = 'aws-jenkins-credentials'
         ECR_REPO_NAME        = 'aws-cicd-platform-app'

@@ -28,7 +28,7 @@ fi
 
 if [[ -z "$ENDPOINT" ]]; then
     echo "Usage: $0 <http://ALB-DNS-NAME-OR-IP>"
-    echo "Example: $0 http://aws-cicd-platform-alb-123456789.us-east-1.elb.amazonaws.com"
+    echo "Example: $0 http://aws-cicd-platform-alb-123456789.ap-south-1.elb.amazonaws.com"
     exit 1
 fi
 
