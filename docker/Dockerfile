@@ -19,12 +19,11 @@ LABEL maintainer="Aditya Pukhraj <https://github.com/adityapukhraj1303>"
 LABEL description="AWS Automated CI/CD Platform - Zero-Bloat DevOps Microservice"
 LABEL org.opencontainers.image.source="https://github.com/adityapukhraj1303/aws-automated-cicd-platform"
 
-# Install minimal required utilities
 RUN apk add --no-cache \
-    bash=~5.2 \
-    socat=~1.8 \
-    curl=~8.5 \
-    jq=~1.7 \
+    bash \
+    socat \
+    curl \
+    jq \
     coreutils \
     tzdata && \
     rm -rf /var/cache/apk/*

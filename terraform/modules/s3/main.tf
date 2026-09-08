@@ -23,7 +23,7 @@ resource "aws_s3_bucket" "artifacts" {
       Name        = local.bucket_name
       Environment = var.environment
       ManagedBy   = "Terraform"
-      Purpose     = "CI/CD Build Artifacts & Remote State"
+      Purpose     = "CI/CD Build Artifacts and Remote State"
     }
   )
 }
