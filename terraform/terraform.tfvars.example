@@ -1,10 +1,10 @@
-aws_region         = "ap-south-1"
-instance_type      = "t3.small"
-project_name       = "aws-cicd-platform"
-environment        = "dev"
-vpc_cidr           = "10.0.0.0/16"
-container_port     = 8080
-desired_count      = 2
-task_cpu           = "256"
-task_memory        = "512"
-log_retention_days = 14
+# ==============================================================================
+# terraform.tfvars.example
+# Copy this file to terraform.tfvars and fill in your values.
+# terraform.tfvars is excluded from Git via .gitignore.
+# ==============================================================================
+
+aws_region   = "ap-south-1"
+project_name = "aws-cicd-platform"
+environment  = "dev"
+instance_type = "t3.small"

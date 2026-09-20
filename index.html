@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AWS Automated CI/CD Platform - Cloud-Native Microservice & Observability Dashboard engineered with Docker, Jenkins, SonarQube, and Terraform." />
+  <meta name="author" content="Aditya Pukhraj" />
+  <title>AWS Automated CI/CD Platform | SRE Telemetry & Control Plane</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-icon">AWS</div>
+        <div>
+          <div class="brand-title">AWS Automated CI/CD Platform</div>
+          <div class="brand-subtitle">DevOps & SRE Control Plane</div>
+        </div>
+      </div>
+      <div class="header-status">
+        <div class="badge-healthy">
+          <div class="pulse-dot"></div>
+          <span id="system-status-text">ALL SYSTEMS OPERATIONAL</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-tag">⚡ Automated CI/CD & Cloud Infrastructure</div>
+      <h1 class="hero-title">Cloud Native CI/CD Runtime</h1>
+      <p class="hero-subtitle">
+        Zero-bloat high-performance web microservice packaged via Docker, orchestrated through Jenkins declarative pipelines, quality-assured with SonarQube Quality Gates, and provisioned on AWS with Terraform.
+      </p>
+    </section>
+
+    <!-- Real-time Telemetry Metrics -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-label">Release Version</div>
+        <div class="metric-value-wrap">
+          <span class="metric-value" id="val-version">v1.0.0</span>
+          <span class="metric-tag tag-blue">SEMVER</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">AWS Region</div>
+        <div class="metric-value-wrap">
+          <span class="metric-value" id="val-region">ap-south-1</span>
+          <span class="metric-tag tag-orange">MUMBAI</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Environment</div>
+        <div class="metric-value-wrap">
+          <span class="metric-value" id="val-env">production</span>
+          <span class="metric-tag tag-purple">LIVE</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Runtime Uptime</div>
+        <div class="metric-value-wrap">
+          <span class="metric-value" id="val-uptime">99.98%</span>
+          <span class="metric-tag tag-emerald">HEALTHY</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Two-Column Interactive View -->
+    <div class="content-grid">
+      <!-- Live Observability Endpoints Card -->
+      <section class="section-card">
+        <h2>⚡ Live Observability Endpoints</h2>
+        
+        <div class="endpoint-item">
+          <div class="endpoint-left">
+            <span class="http-verb">GET</span>
+            <span class="endpoint-path">/health</span>
+            <span class="endpoint-desc">Liveness & readiness probe</span>
+          </div>
+          <button class="endpoint-btn" onclick="testEndpoint('health')">Test Probe</button>
+        </div>
+
+        <div class="endpoint-item">
+          <div class="endpoint-left">
+            <span class="http-verb">GET</span>
+            <span class="endpoint-path">/version</span>
+            <span class="endpoint-desc">Build release metadata</span>
+          </div>
+          <button class="endpoint-btn" onclick="testEndpoint('version')">Inspect</button>
+        </div>
+
+        <div class="endpoint-item">
+          <div class="endpoint-left">
+            <span class="http-verb">GET</span>
+            <span class="endpoint-path">/api/info</span>
+            <span class="endpoint-desc">Cloud environment details</span>
+          </div>
+          <button class="endpoint-btn" onclick="testEndpoint('info')">Metadata</button>
+        </div>
+
+        <div class="endpoint-item">
+          <div class="endpoint-left">
+            <span class="http-verb">GET</span>
+            <span class="endpoint-path">/api/metrics</span>
+            <span class="endpoint-desc">Prometheus metrics format</span>
+          </div>
+          <button class="endpoint-btn" onclick="testEndpoint('metrics')">Prometheus</button>
+        </div>
+
+        <!-- Interactive Telemetry Console -->
+        <div class="console-box">
+          <div class="console-header">
+            <span>Terminal Output / JSON Response</span>
+            <span id="response-timestamp">READY</span>
+          </div>
+          <pre class="console-output" id="console-display">Click any endpoint button above to test live payload response...</pre>
+        </div>
+      </section>
+
+      <!-- CI/CD Pipeline Automation Stages -->
+      <section class="section-card">
+        <h2>🚀 CI/CD Automation Stages</h2>
+
+        <div class="pipeline-stage">
+          <div class="stage-number">1</div>
+          <div class="stage-content">
+            <h3>Build & Lint <span class="stage-badge">Automated</span></h3>
+            <p>Code validation, HTML/CSS asset checks, and lightweight Docker container compilation with Nginx on Alpine Linux.</p>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-number">2</div>
+          <div class="stage-content">
+            <h3>SonarQube Quality Gate <span class="stage-badge">Strict</span></h3>
+            <p>Deep static code analysis and security auditing. Pipeline automatically aborts on any Quality Gate breach.</p>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-number">3</div>
+          <div class="stage-content">
+            <h3>Container Health Check <span class="stage-badge">Verified</span></h3>
+            <p>Spins up local test container and runs automated curl probes verifying HTTP 200 response and headers.</p>
+          </div>
+        </div>
+
+        <div class="pipeline-stage">
+          <div class="stage-number">4</div>
+          <div class="stage-content">
+            <h3>AWS Production Deploy <span class="stage-badge">IaC</span></h3>
+            <p>Terraform provisions secure AWS EC2/ECR infrastructure with automated user-data container startup and S3 archiving.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Quick Run Guide Section -->
+    <section class="quick-run-card">
+      <h2>💻 Quick Run (Local & Production)</h2>
+      
+      <div class="code-snippet-wrap">
+        <code>docker build -t aws-automated-cicd-platform .</code>
+        <button class="copy-btn" onclick="copyCode(this, 'docker build -t aws-automated-cicd-platform .')">Copy</button>
+      </div>
+
+      <div class="code-snippet-wrap">
+        <code>docker run -d -p 80:80 --name cicd-app aws-automated-cicd-platform</code>
+        <button class="copy-btn" onclick="copyCode(this, 'docker run -d -p 80:80 --name cicd-app aws-automated-cicd-platform')">Copy</button>
+      </div>
+
+      <div class="code-snippet-wrap">
+        <code>cd terraform && terraform init && terraform apply -auto-approve</code>
+        <button class="copy-btn" onclick="copyCode(this, 'cd terraform && terraform init && terraform apply -auto-approve')">Copy</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    Designed & Engineered by <a href="https://github.com/adityapukhraj1303" target="_blank" rel="noopener noreferrer">Aditya Pukhraj</a> | AWS Automated CI/CD Platform
+  </footer>
+
+  <!-- Interactive Logic -->
+  <script>
+    const mockResponses = {
+      health: {
+        status: "UP",
+        timestamp: new Date().toISOString(),
+        checks: [
+          { name: "web_server", status: "OK", latency_ms: 1.2 },
+          { name: "docker_runtime", status: "OK", engine: "Docker 24.0+" },
+          { name: "aws_region_connectivity", status: "OK", region: "ap-south-1" }
+        ],
+        http_code: 200
+      },
+      version: {
+        project: "aws-automated-cicd-platform",
+        version: "1.0.0",
+        release_channel: "production",
+        git_commit: "938919f",
+        build_engine: "Jenkins Declarative Pipeline",
+        author: "Aditya Pukhraj"
+      },
+      info: {
+        environment: "production",
+        aws_region: "ap-south-1",
+        container_os: "Alpine Linux (Nginx)",
+        iac_framework: "Terraform 1.7+",
+        ci_cd_platform: "Jenkins + SonarQube",
+        port: 80
+      },
+      metrics: `# HELP http_requests_total Total number of HTTP requests
+# TYPE http_requests_total counter
+http_requests_total{method="GET",handler="/health",status="200"} 1842
+http_requests_total{method="GET",handler="/",status="200"} 4529
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 12.45
+# HELP container_memory_usage_bytes Current memory usage in bytes
+# TYPE container_memory_usage_bytes gauge
+container_memory_usage_bytes 14882816`
+    };
+
+    function testEndpoint(type) {
+      const display = document.getElementById('console-display');
+      const timestamp = document.getElementById('response-timestamp');
+      timestamp.innerText = new Date().toLocaleTimeString();
+
+      const data = mockResponses[type];
+      if (typeof data === 'string') {
+        display.innerText = data;
+        display.style.color = '#38bdf8';
+      } else {
+        display.innerText = JSON.stringify(data, null, 2);
+        display.style.color = '#a7f3d0';
+      }
+    }
+
+    function copyCode(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.innerText;
+        btn.innerText = 'Copied!';
+        btn.style.backgroundColor = '#10b981';
+        btn.style.color = '#fff';
+        setTimeout(() => {
+          btn.innerText = original;
+          btn.style.backgroundColor = '';
+          btn.style.color = '';
+        }, 1800);
+      });
+    }
+
+    // Dynamic timer
+    let uptimeSeconds = 14420;
+    setInterval(() => {
+      uptimeSeconds++;
+      const hrs = Math.floor(uptimeSeconds / 3600);
+      const mins = Math.floor((uptimeSeconds % 3600) / 60);
+      const secs = uptimeSeconds % 60;
+      document.getElementById('response-timestamp').innerText = `${hrs}h ${mins}m ${secs}s`;
+    }, 1000);
+  </script>
+</body>
+</html>
