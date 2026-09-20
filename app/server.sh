@@ -60,8 +60,8 @@ handle_request() {
     local request_line
     read -r request_line || return
 
-    local method path proto
-    read -r method path proto <<< "$request_line"
+    local path
+    read -r _ path _ <<< "$request_line"
 
     # Consume remaining HTTP request headers until empty line (\r)
     while read -r header_line; do
